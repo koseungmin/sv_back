@@ -83,5 +83,5 @@ const Company = server.define('svCompany' , {
 
 
 module.exports = {
-    Faq : Faq
+    Company : Company
 }

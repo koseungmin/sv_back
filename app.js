@@ -11,7 +11,8 @@ app.use('/apply', require('./api/interface/apply'));
 app.use('/faq', require('./api/interface/faq'));
 //app.use('/board', require('./api/interface/board'));
 app.use('/menu', require('./api/interface/menu'));
-//app.use('/company', require('./api/interface/company'));
+app.use('/company', require('./api/interface/company'));
+app.use('/recruitNotice', require('./api/interface/recruitNotice'));
 //CORS설정
 app.use(cors());
 

@@ -45,7 +45,7 @@ exports.destroy = (req, res) => {
     }else{
       models.Question.destroy({
         where: {questionSeq: questionSeq}
-      }).then(() => res.status(200).json('성공적으로 삭제하였습니다'))
+      }).then(() => res.status(200).json(systemMessage.delete.success))
       .catch(function (err) {
             res.status(500).json(err)
       });
