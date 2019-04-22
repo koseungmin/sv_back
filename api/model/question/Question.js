@@ -31,6 +31,15 @@ const Question = server.define('svQuestion' , {
   questionContent : {
     type : Sequelize.STRING(3000)
   },
+  //문의내용
+  questionAnswer : {
+    type : Sequelize.STRING(2000)
+  },
+  //문의내용
+  answerYn : {
+    type : Sequelize.STRING(2),
+    defaultValue : 'N'
+  },
   //생성날짜
   createDatetime : {
     type : Sequelize.DATE,

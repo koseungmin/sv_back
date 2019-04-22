@@ -37,39 +37,6 @@ exports.show = (req,res) => {
     });
   };
 
-exports.personalRecruitList = (req,res) => {
-  const regionCode = req.params.regionCode || '';
-  const noticeNumber = req.params.noticeNumber || '';
-  const applyUserId = req.params.applyUserId || '';
-  const query = "SELECT " +
-                  "notice.notice_name as noticeName, " +
-                  "notice.notice_start_datetime as noticeStartDatetime, " +
-                  "notice.notice_end_datetime as noticeEndDatetime, " +
-                  "notice.anounce_datetime as anounceDatetime, " +
-                  "notice.notice_status as noticeStatus " +
-                  "FROM " +
-                  "SV_APPLIES apply ,SV_RECRUIT_NOTICES notice " +
-                  "WHERE apply.region_code = notice.region_code " +
-                  "and apply.notice_number = notice.notice_number " +
-                  "and apply.apply_user_id =:apply_user_id " +
-                  "and apply.region_code =:region_code " +
-                  "and apply.notice_number =:notice_number "
-
-  return querySequelize.query(query, {
-    raw: true,
-    replacements:{
-      region_code : regionCode,
-      notice_number : noticeNumber,
-      apply_user_id : applyUserId
-    }
-  }).spread(function(results){
-    console.log(results);
-    return res.json(results);
-  }).catch(function (err) {
-      res.status(500).json(err)
-  });
-};
-
 exports.destroy = (req, res) => {
   const regionCode = req.params.regionCode || '';
   const noticeNumber = req.params.noticeNumber || '';

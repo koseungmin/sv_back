@@ -1,16 +1,7 @@
 const models = require('../../model/question/Question');
 const systemMessage = require('../../../config/systemMessage');
 
-exports.index = (req,res) => {
-  //추후 내가 쓴 문의사항만 보여주도록 변경 필요, 인증정보 나오면
-    models.Question.findAll()
-    .then(questions => res.json(questions))
-    .catch(function (err) {
-        res.status(500).json(err)
-    });
-};
-
-exports.show = (req,res) => {
+exports.showByQuestion = (req,res) => {
   const questionSeq = req.params.questionSeq || '';
 
   if(!questionSeq.length){
@@ -29,6 +20,57 @@ exports.show = (req,res) => {
     });
 };
 
+exports.showByUser = (req,res) => {
+  const createUserId = req.params.createUserId || '';
+
+  if(!createUserId.length){
+    return res.status(400).json({error:systemMessage.search.incorrectKey + "createUserId" , req:createUserId});
+  }
+
+  models.Question.findAll({
+    where: {createUserId:createUserId}
+  }).then(question => {
+      if (!question){
+        return res.status(404).json({error:systemMessage.search.targetMissing});
+      }
+      return res.json(question);
+    }).catch(function (err) {
+        res.status(500).json(err)
+    });
+};
+
+exports.index = (req,res) => {
+  //추후 내가 쓴 문의사항만 보여주도록 변경 필요, 인증정보 나오면
+    models.Question.findAll()
+    .then(questions => res.json(questions))
+    .catch(function (err) {
+        res.status(500).json(err)
+    });
+};
+
+exports.show = (req,res) => {
+  const questionSeq = req.params.questionSeq || '';
+  const createUserId = req.params.createUserId || '';
+
+  if(!questionSeq.length){
+    return res.status(400).json({error:systemMessage.search.incorrectKey + "questionSeq" , req:questionSeq});
+  }
+
+  if(!createUserId.length){
+    return res.status(400).json({error:systemMessage.search.incorrectKey + "createUserId" , req:createUserId});
+  }
+
+  models.Question.findOne({
+    where: {questionSeq: questionSeq, createUserId:createUserId}
+  }).then(question => {
+      if (!question){
+        return res.status(404).json({error:systemMessage.search.targetMissing});
+      }
+      return res.json(question);
+    }).catch(function (err) {
+        res.status(500).json(err)
+    });
+};
 
 exports.destroy = (req, res) => {
   const questionSeq = req.params.questionSeq || '';
@@ -59,8 +101,8 @@ exports.create = (req,res) => {
   const questionType = req.body.questionType || '';
   const questionTitle = req.body.questionTitle || '';
   const questionContent = req.body.questionContent || '';
-  const questionCreateUserId = req.body.questionCreateUserId || '';
-  const questionUpdateUserId = req.body.questionUpdateUserId || '';
+  const createUserId = req.body.createUserId || '';
+  const updateUserId = req.body.updateUserId || '';
 
   //if(!questionEmail.length){
 //    return res.status(400).json({error:'잘못된 이메일 주소입니다.' , req:questionEmail});
@@ -76,8 +118,8 @@ exports.create = (req,res) => {
       questionType: questionType,
       questionTitle: questionTitle,
       questionContent: questionContent,
-      questionCreateUserId: questionCreateUserId,
-      questionUpdateUserId: questionUpdateUserId
+      createUserId: createUserId,
+      updateUserId: updateUserId
   }).then((question) => res.status(201).json(question))
   .catch(function (err) {
       res.status(500).json(err)
@@ -91,8 +133,8 @@ exports.update = (req,res) => {
   const questionType = req.body.questionType || '';
   const questionTitle = req.body.questionTitle || '';
   const questionContent = req.body.questionContent || '';
-  const questionCreateUserId = req.body.questionCreateUserId || '';
-  const questionUpdateUserId = req.body.questionUpdateUserId || '';
+  const createUserId = req.body.createUserId || '';
+  const updateUserId = req.body.updateUserId || '';
 
 //  if(!questionEmail.length){
 //    return res.status(400).json({error:'잘못된 이메일 주소입니다.' , req:questionEmail});
@@ -111,8 +153,8 @@ exports.update = (req,res) => {
     questionType: questionType,
     questionTitle: questionTitle,
     questionContent: questionContent,
-    questionCreateUserId: questionCreateUserId,
-    questionUpdateUserId: questionUpdateUserId,
+    createUserId: createUserId,
+    updateUserId: updateUserId,
     updateDatetime: time
   } , {
        where: {questionSeq: questionSeq}

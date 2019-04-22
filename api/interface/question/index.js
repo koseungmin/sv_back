@@ -8,7 +8,11 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 router.get('/', controller.index);
 
-router.get('/:questionSeq' , controller.show);
+router.get('/question/:questionSeq' , controller.showByQuestion);
+
+router.get('/user/:createUserId' , controller.showByUser);
+
+router.get('/:questionSeq/:createUserId' , controller.show);
 
 router.delete('/:questionSeq' , controller.destroy);
 
